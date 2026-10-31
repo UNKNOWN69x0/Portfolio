@@ -15,8 +15,9 @@ import Hero from './components/hero/Hero.jsx'
 import About from './components/about/About.jsx'
 import Projects from './components/projects/Projects.jsx'
 import Skills from './components/skills/Skills.jsx'
+import Journey from './components/journey/Journey.jsx'
 
-const BUILT = { hero: Hero, about: About, projects: Projects, skills: Skills }
+const BUILT = { hero: Hero, about: About, projects: Projects, skills: Skills, journey: Journey }
 
 // Structure only. Section contents are built in later stages.
 function Placeholder({ id, sector, eyebrow, title }) {

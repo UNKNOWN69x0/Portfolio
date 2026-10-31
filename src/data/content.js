@@ -166,15 +166,17 @@ export const experience = [
 ]
 
 // Race calendar (timeline) order, exactly as given in content.md.
+// `type` sets the accent (education, project, competition, graduation);
+// `ref` points at the entry whose details are shown when the round is expanded.
 export const timeline = [
-  { round: 1, label: 'Class X', year: '2020' },
-  { round: 2, label: 'Class XII', year: '2022' },
-  { round: 3, label: 'B.E. begins', year: '2022' },
-  { round: 4, label: 'SafetyApp', year: '2024' },
-  { round: 5, label: 'EduCertify', year: '2025' },
-  { round: 6, label: "X'ploitathon CTF", year: '2025' },
-  { round: 7, label: 'Self-Healing IDS', year: '2026' },
-  { round: 8, label: 'Graduation', year: '2026' },
+  { round: 1, label: 'Class X', year: '2020', type: 'education', ref: { source: 'education', index: 2 } },
+  { round: 2, label: 'Class XII', year: '2022', type: 'education', ref: { source: 'education', index: 1 } },
+  { round: 3, label: 'B.E. begins', year: '2022', type: 'education', ref: { source: 'education', index: 0 } },
+  { round: 4, label: 'SafetyApp', year: '2024', type: 'project', ref: { source: 'projects', index: 2 } },
+  { round: 5, label: 'EduCertify', year: '2025', type: 'project', ref: { source: 'projects', index: 1 } },
+  { round: 6, label: "X'ploitathon CTF", year: '2025', type: 'competition', ref: { source: 'experience', index: 0 } },
+  { round: 7, label: 'Self-Healing IDS', year: '2026', type: 'project', ref: { source: 'projects', index: 0 } },
+  { round: 8, label: 'Graduation', year: '2026', type: 'graduation', ref: { source: 'education', index: 0 } },
 ]
 
 // Site structure: section ids, nav labels and heading copy (theme labels, not personal content).
