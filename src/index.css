@@ -267,3 +267,74 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------- Hero ---------- */
+.speed-line {
+  position: absolute;
+  left: 0;
+  top: var(--top);
+  height: 1px;
+  width: var(--w);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  opacity: var(--o);
+  transform: translate3d(var(--sx), 0, 0);
+}
+
+.pulse-dot {
+  display: inline-block;
+}
+
+/* If animation JS ever stalls, force hero content visible and drop the intro overlay. */
+@keyframes hero-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes intro-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+@keyframes speed-line {
+  from {
+    transform: translate3d(-40vw, 0, 0);
+  }
+  to {
+    transform: translate3d(130vw, 0, 0);
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.hero-failsafe {
+  animation: hero-failsafe 0.01s 10s forwards;
+}
+
+.intro-failsafe {
+  animation: intro-failsafe 0.01s 9s forwards;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .speed-line {
+    animation: speed-line var(--dur) linear var(--delay) infinite;
+    will-change: transform;
+  }
+
+  .pulse-dot {
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+}

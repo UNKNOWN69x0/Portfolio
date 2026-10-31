@@ -6,6 +6,7 @@
 export const profile = {
   name: 'Suraj Lohia',
   title: 'Cybersecurity Engineer (fresh graduate)',
+  tagline: 'Cybersecurity Engineer. Built for speed, secured by design.',
   location: 'Mumbai, India',
   email: 'surajlohia2@gmail.com',
   github: 'https://github.com/UNKNOWN69x0',
