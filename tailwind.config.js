@@ -13,6 +13,8 @@ export default {
         hard: '#F2F4F7',
         telemetry: '#22D3EE',
         muted: '#8A90A0',
+        // timing-screen purple: reserved for "fastest lap" markers
+        fastest: '#C084FC',
       },
       fontFamily: {
         display: ['"Chakra Petch"', 'system-ui', 'sans-serif'],

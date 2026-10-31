@@ -8,6 +8,7 @@ export const profile = {
   title: 'Cybersecurity Engineer (fresh graduate)',
   tagline: 'Cybersecurity Engineer. Built for speed, secured by design.',
   location: 'Mumbai, India',
+  educationSummary: 'B.E. CSE, SIES GST',
   email: 'surajlohia2@gmail.com',
   github: 'https://github.com/UNKNOWN69x0',
   linkedin: 'https://www.linkedin.com/in/surajlohia/',
@@ -27,6 +28,7 @@ export const projects = [
       'Random Forest classifier (100 trees) trained on the UNSW-NB15 dataset, 80:20 train-test split, with label encoding, normalization and feature-importance-based selection.',
     keyResult: '94.51% accuracy',
     link: '',
+    pipeline: [],
   },
   {
     title: 'EduCertify: Blockchain Document Verifier',
@@ -37,6 +39,13 @@ export const projects = [
     model: '',
     keyResult: 'Working end-to-end prototype (upload, hash, verify)',
     link: '',
+    // Build-pipeline steps, summarised from the description above.
+    pipeline: [
+      { label: 'Hash', detail: 'SHA-256 in the browser with the Web Crypto API' },
+      { label: 'Connect', detail: 'MetaMask integrated via Web3.js' },
+      { label: 'Record', detail: 'Solidity smart contract with admin-only upload' },
+      { label: 'Verify', detail: "Public check of a hash against a student's address" },
+    ],
   },
   {
     title: 'SafetyApp',
@@ -47,6 +56,13 @@ export const projects = [
     model: '',
     keyResult: 'Working two-app prototype with live location sharing',
     link: '',
+    // Build-pipeline steps, summarised from the description above.
+    pipeline: [
+      { label: 'Sign in', detail: 'Firebase Authentication' },
+      { label: 'Alert', detail: 'Dedicated buttons for different emergencies' },
+      { label: 'Locate', detail: 'Live location shared with the Google Maps API' },
+      { label: 'Respond', detail: 'Department app receives and responds' },
+    ],
   },
 ]
 
@@ -165,7 +181,7 @@ export const timeline = [
 export const sections = [
   { id: 'hero', nav: 'Start', sector: 'S0', eyebrow: 'Lights out', title: 'Home' },
   { id: 'about', nav: 'About', sector: 'S1', eyebrow: 'Driver profile', title: 'About' },
-  { id: 'projects', nav: 'Projects', sector: 'S2', eyebrow: 'The grid', title: 'Projects' },
+  { id: 'projects', nav: 'Projects', sector: 'S2', eyebrow: 'Race results', title: 'Projects' },
   { id: 'skills', nav: 'Skills', sector: 'S3', eyebrow: 'Tyre strategy', title: 'Skills' },
   {
     id: 'journey',

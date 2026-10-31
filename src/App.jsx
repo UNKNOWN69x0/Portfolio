@@ -12,6 +12,10 @@ import SectionTransition from './components/ui/SectionTransition.jsx'
 import GlassPanel from './components/ui/GlassPanel.jsx'
 import Reveal from './components/ui/Reveal.jsx'
 import Hero from './components/hero/Hero.jsx'
+import About from './components/about/About.jsx'
+import Projects from './components/projects/Projects.jsx'
+
+const BUILT = { hero: Hero, about: About, projects: Projects }
 
 // Structure only. Section contents are built in later stages.
 function Placeholder({ id, sector, eyebrow, title }) {
@@ -45,12 +49,15 @@ export default function App() {
       <Navbar />
       <TelemetryHUD />
       <main className="relative z-10">
-        {sections.map((s, i) => (
-          <div key={s.id}>
-            {i > 0 && s.id !== 'about' && <SectionTransition />}
-            {s.id === 'hero' ? <Hero /> : <Placeholder {...s} />}
-          </div>
-        ))}
+        {sections.map((s, i) => {
+          const Built = BUILT[s.id]
+          return (
+            <div key={s.id}>
+              {i > 0 && s.id !== 'about' && <SectionTransition />}
+              {Built ? <Built /> : <Placeholder {...s} />}
+            </div>
+          )
+        })}
       </main>
       <Footer />
     </MotionConfig>
