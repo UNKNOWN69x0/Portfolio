@@ -1,0 +1,269 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* sticky header (nav 56px + ticker 28px) plus a little air */
+    scroll-padding-top: 5.5rem;
+    background-color: #0b0c10;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-carbon font-sans text-hard antialiased;
+    min-width: 320px;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+
+  ::selection {
+    background-color: #ff3b30;
+    color: #0b0c10;
+  }
+
+  :focus-visible {
+    outline: 2px solid #22d3ee;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-page px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Checkered flag pattern, pure CSS so it stays original and crisp */
+  .checkered {
+    --cell: 14px;
+    background-color: #f2f4f7;
+    background-image: conic-gradient(
+      #0b0c10 25%,
+      transparent 25% 50%,
+      #0b0c10 50% 75%,
+      transparent 75%
+    );
+    background-size: calc(var(--cell) * 2) calc(var(--cell) * 2);
+  }
+
+  /* ---------- Backdrop layers (all static paint; motion is transform/opacity only) ---------- */
+
+  /* Carbon-fibre weave: pure CSS gradient tile, darkened so text keeps contrast */
+  .carbon-weave {
+    background-color: #0c0d11;
+    background-image:
+      linear-gradient(27deg, #13151a 5px, transparent 5px),
+      linear-gradient(207deg, #13151a 5px, transparent 5px),
+      linear-gradient(27deg, #1a1d24 5px, transparent 5px),
+      linear-gradient(207deg, #1a1d24 5px, transparent 5px),
+      linear-gradient(90deg, #101217 10px, transparent 10px),
+      linear-gradient(
+        #14161c 25%,
+        #111318 25%,
+        #111318 50%,
+        transparent 50%,
+        transparent 75%,
+        #1b1e25 75%,
+        #1b1e25
+      );
+    background-position:
+      0 5px,
+      10px 0,
+      0 10px,
+      10px 5px,
+      0 0,
+      0 0;
+    background-size: 20px 20px;
+  }
+
+  /* Soft vignette plus a faint red wash from the top-left corner */
+  .vignette {
+    background:
+      radial-gradient(ellipse at 12% -8%, rgba(255, 59, 48, 0.16), transparent 55%),
+      radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.7) 100%);
+  }
+
+  /* Red light sweep. Static diagonal wash by default; animated only when motion is allowed. */
+  .light-sweep {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 59, 48, 0.1) 45%,
+      rgba(255, 120, 110, 0.14) 50%,
+      rgba(255, 59, 48, 0.1) 55%,
+      transparent
+    );
+    transform: translate3d(15vw, 0, 0) skewX(-20deg);
+    opacity: 0.6;
+  }
+
+  .particle {
+    position: absolute;
+    bottom: -8px;
+    left: var(--x);
+    width: var(--size);
+    height: var(--size);
+    border-radius: 9999px;
+    background: #ff3b30;
+    box-shadow: 0 0 6px rgba(255, 59, 48, 0.8);
+    opacity: var(--o);
+    /* static resting position (used as-is under reduced motion) */
+    transform: translate3d(0, calc(var(--y) * -1vh), 0);
+  }
+
+  /* ---------- Glow ---------- */
+  .text-glow {
+    text-shadow:
+      0 0 8px rgba(255, 59, 48, 0.7),
+      0 0 22px rgba(255, 59, 48, 0.35);
+  }
+
+  /* ---------- Glass + chamfer ---------- */
+
+  /* Chamfered corners (top-left and bottom-right). --cut is set per panel. */
+  .chamfer {
+    clip-path: polygon(
+      var(--cut) 0,
+      100% 0,
+      100% calc(100% - var(--cut)),
+      calc(100% - var(--cut)) 100%,
+      0 100%,
+      0 var(--cut)
+    );
+  }
+
+  .glass-frame {
+    position: relative;
+    display: block;
+  }
+
+  /* 1px angled border: a gradient showing through the gap between two clipped shapes */
+  .glass-border {
+    height: 100%;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 59, 48, 0.85),
+      rgba(255, 255, 255, 0.14) 32%,
+      rgba(255, 255, 255, 0.05) 66%,
+      rgba(34, 211, 238, 0.4)
+    );
+  }
+
+  .glass-body {
+    --cut: calc(var(--cut-outer) - 0.6px);
+    position: relative;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(30, 33, 43, 0.7), rgba(14, 16, 21, 0.78));
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  @media (min-width: 768px) {
+    .glass-body {
+      -webkit-backdrop-filter: blur(12px) saturate(1.2);
+      backdrop-filter: blur(12px) saturate(1.2);
+    }
+  }
+
+  /* Neon top edge for emphasised panels */
+  .glass-accent::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: linear-gradient(90deg, #ff3b30, rgba(255, 59, 48, 0) 70%);
+    box-shadow: 0 0 12px rgba(255, 59, 48, 0.9);
+  }
+
+  /* ---------- Ticker ---------- */
+  .ticker-track {
+    display: flex;
+    width: max-content;
+  }
+
+  .ticker-group {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  /* ---------- Custom cursor (desktop, fine pointer, motion allowed) ---------- */
+  html.has-custom-cursor,
+  html.has-custom-cursor *:not(input):not(textarea):not(select) {
+    cursor: none;
+  }
+}
+
+/* ---------- Motion: defined ONLY when the user has no reduced-motion preference ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .light-sweep {
+    opacity: 1;
+    animation: light-sweep 16s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .particle {
+    animation: float-up var(--dur) linear var(--delay) infinite;
+    will-change: transform, opacity;
+  }
+
+  .ticker-track {
+    animation: ticker 38s linear infinite;
+    will-change: transform;
+  }
+}
+
+@keyframes light-sweep {
+  0% {
+    transform: translate3d(-60vw, 0, 0) skewX(-20deg);
+  }
+  55%,
+  100% {
+    transform: translate3d(130vw, 0, 0) skewX(-20deg);
+  }
+}
+
+@keyframes float-up {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  10%,
+  85% {
+    opacity: var(--o);
+  }
+  100% {
+    transform: translate3d(var(--drift), -112vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes ticker {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Backstop: no CSS motion for users who ask for less */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
