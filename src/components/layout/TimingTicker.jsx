@@ -1,15 +1,10 @@
-import { education, profile } from '../../data/content.js'
+import { profile } from '../../data/content.js'
 
 // Timing-tower style strip. Only real facts from content.js; entries with no value are skipped.
-const cgpa = education
-  .map((e) => /^CGPA\s+(.+)$/i.exec(e.score || ''))
-  .find(Boolean)?.[1]
-
 const ITEMS = [
   { tag: 'Driver', value: profile.name },
   { tag: 'Role', value: profile.title },
   { tag: 'Base', value: profile.location },
-  { tag: 'CGPA', value: cgpa },
 ].filter((i) => i.value)
 
 function Group({ hiddenFromAT = false, extraClass = '' }) {

@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
-import { education, profile } from '../../data/content.js'
+import { profile } from '../../data/content.js'
 import useMediaQuery from '../../hooks/useMediaQuery.js'
 import GlassPanel from '../ui/GlassPanel.jsx'
 import HelmetGraphic from './HelmetGraphic.jsx'
@@ -38,8 +38,6 @@ export default function DriverCard() {
     targetY.set(0)
   }
 
-  const degree = education[0]
-
   return (
     <motion.div
       className="h-full"
@@ -67,7 +65,6 @@ export default function DriverCard() {
               <Field label="Location">{profile.location}</Field>
               <Field label="Education">
                 {profile.educationSummary}
-                <span className="mt-0.5 block font-mono text-sm text-muted">{degree.score}</span>
               </Field>
             </dl>
           </div>

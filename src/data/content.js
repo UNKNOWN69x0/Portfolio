@@ -12,6 +12,7 @@ export const profile = {
   email: 'surajlohia2@gmail.com',
   github: 'https://github.com/UNKNOWN69x0',
   linkedin: 'https://www.linkedin.com/in/surajlohia/',
+  resumeUrl: '/Suraj_Lohia_Resume.pdf',
 }
 
 export const about =
@@ -137,7 +138,6 @@ export const education = [
     school: 'SIES Graduate School of Technology',
     location: 'Navi Mumbai',
     years: '2022 to 2026',
-    score: 'CGPA 7.03',
   },
   {
     degree: 'Class XII (CBSE)',

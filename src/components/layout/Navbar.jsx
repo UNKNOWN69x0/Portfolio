@@ -63,6 +63,19 @@ export default function Navbar() {
               </li>
             )
           })}
+          {profile.resumeUrl && (
+            <li className="ml-2 flex items-center">
+              <a
+                href={profile.resumeUrl}
+                download
+                aria-label="Download resume (PDF)"
+                className="inline-flex min-h-[44px] items-center gap-2 border border-kerb px-3 font-mono text-xs uppercase tracking-wider text-hard transition-colors hover:bg-kerb hover:text-carbon"
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14" /></svg>
+                Resume
+              </a>
+            </li>
+          )}
         </ul>
 
         {/* Mobile toggle */}
@@ -107,6 +120,20 @@ export default function Navbar() {
                 </a>
               </li>
             ))}
+            {profile.resumeUrl && (
+              <li className="border-t border-white/5">
+                <a
+                  href={profile.resumeUrl}
+                  download
+                  aria-label="Download resume (PDF)"
+                  onClick={() => setOpen(false)}
+                  className="container-page flex min-h-[48px] items-center gap-3 font-mono text-sm uppercase tracking-wider text-kerb"
+                >
+                  <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14" /></svg>
+                  Download Resume
+                </a>
+              </li>
+            )}
           </motion.ul>
         )}
       </AnimatePresence>

@@ -48,7 +48,7 @@ Full list from resume:
 - Blockchain & Tools: Web3.js, MetaMask, Remix IDE, Ganache, Git/GitHub
 
 ## Education
-- B.E. Computer Science & Engineering (IoT & Cybersecurity incl. Blockchain Technology), SIES Graduate School of Technology, Navi Mumbai, 2022 to 2026, CGPA 7.03
+- B.E. Computer Science & Engineering (IoT & Cybersecurity incl. Blockchain Technology), SIES Graduate School of Technology, Navi Mumbai, 2022 to 2026
 - Class XII (CBSE), DAV Public School Nerul, Navi Mumbai, 2022, 85.6%
 - Class X (CBSE), DAV Public School Nerul, Navi Mumbai, 2020, 93.6%
 
