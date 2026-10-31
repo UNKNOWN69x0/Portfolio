@@ -8,6 +8,8 @@ export default {
         asphalt: '#15171E',
         'asphalt-light': '#1E212B',
         kerb: '#FF3B30',
+        // small red text: kerb itself falls below AA on the panels
+        'kerb-light': '#FF5A50',
         soft: '#FF4D4D',
         medium: '#FFD23F',
         hard: '#F2F4F7',

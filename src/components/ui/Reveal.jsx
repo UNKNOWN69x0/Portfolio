@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 // Scroll-triggered fade/slide-in. With reduced motion it renders a plain
 // element so content is never hidden behind an animation.
@@ -10,7 +10,7 @@ export default function Reveal({ children, delay = 0, y = 24, className = '', as
     return <Tag className={className}>{children}</Tag>
   }
 
-  const MotionTag = motion[as]
+  const MotionTag = m[as]
   return (
     <MotionTag
       className={className}

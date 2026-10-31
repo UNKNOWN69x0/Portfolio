@@ -1,8 +1,8 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 export const ACCENT = {
   education: '#22D3EE',
-  project: '#FF3B30',
+  project: '#FF5A50',
   competition: '#FFD23F',
   graduation: '#F2F4F7',
 }
@@ -57,7 +57,7 @@ export default function RoundNode({ type }) {
   return (
     <span className="relative flex h-9 w-9 items-center justify-center">
       {!reduce && (
-        <motion.span
+        <m.span
           aria-hidden="true"
           className="absolute inset-1 rounded-full"
           style={{ border: `2px solid ${color}` }}

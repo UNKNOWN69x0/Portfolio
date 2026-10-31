@@ -22,8 +22,8 @@ export default function Projects() {
   useModalFocus(openIndex !== null, panelRef, triggerRef, close)
 
   return (
-    <section id="projects" className="container-page section-y">
-      <SectionHeading {...meta} titleClassName="text-fluid-title" />
+    <section id="projects" aria-labelledby="projects-title" className="container-page section-y">
+      <SectionHeading {...meta} />
 
       <div aria-hidden="true" className="hidden lg:block">
         <Reveal delay={0.05} className="timing-grid timing-head hud-label mb-2 py-1 pl-6 pr-4">

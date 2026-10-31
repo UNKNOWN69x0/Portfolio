@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 // Non-numeric build flow. Nodes are sector labels, not measurements.
 export default function BuildPipeline({ steps }) {
@@ -7,7 +7,7 @@ export default function BuildPipeline({ steps }) {
   return (
     <ol>
       {steps.map(({ label, detail }, i) => (
-        <motion.li
+        <m.li
           key={label}
           className="pipeline-step"
           initial={reduce ? false : { opacity: 0, x: -10 }}
@@ -21,7 +21,7 @@ export default function BuildPipeline({ steps }) {
             {label}
           </span>
           <span className="block text-base leading-snug text-hard/75">{detail}</span>
-        </motion.li>
+        </m.li>
       ))}
     </ol>
   )

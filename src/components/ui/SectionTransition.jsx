@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 import CheckeredDivider from './CheckeredDivider.jsx'
 
 const LINES = [
@@ -14,7 +14,7 @@ export default function SectionTransition() {
   if (reduce) return <CheckeredDivider />
 
   return (
-    <motion.div
+    <m.div
       aria-hidden="true"
       className="relative"
       initial="hidden"
@@ -24,7 +24,7 @@ export default function SectionTransition() {
       {/* speed lines: desktop only */}
       <div className="relative hidden h-8 overflow-hidden md:block">
         {LINES.map(({ top, delay }) => (
-          <motion.span
+          <m.span
             key={top}
             className="absolute left-0 h-0.5 w-1/3 bg-gradient-to-r from-transparent via-kerb to-transparent shadow-glow-sm"
             style={{ top }}
@@ -40,7 +40,7 @@ export default function SectionTransition() {
         ))}
       </div>
       {/* chequered wipe */}
-      <motion.div
+      <m.div
         style={{ originX: 0 }}
         variants={{
           hidden: { scaleX: 0 },
@@ -48,7 +48,7 @@ export default function SectionTransition() {
         }}
       >
         <CheckeredDivider />
-      </motion.div>
-    </motion.div>
+      </m.div>
+    </m.div>
   )
 }

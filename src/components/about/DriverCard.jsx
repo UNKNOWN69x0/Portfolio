@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
+import { m, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
 import { profile } from '../../data/content.js'
 import useMediaQuery from '../../hooks/useMediaQuery.js'
 import GlassPanel from '../ui/GlassPanel.jsx'
@@ -39,7 +39,7 @@ export default function DriverCard() {
   }
 
   return (
-    <motion.div
+    <m.div
       className="h-full"
       style={canTilt ? { rotateX, rotateY, transformPerspective: 1000 } : undefined}
       onPointerMove={canTilt ? onMove : undefined}
@@ -60,16 +60,16 @@ export default function DriverCard() {
             <p className="text-fluid-name font-display font-bold uppercase tracking-tight text-hard">
               {profile.name}
             </p>
-            <p className="mb-4 mt-2 text-base leading-snug text-telemetry">{profile.title}</p>
+            {profile.title && (
+              <p className="mb-4 mt-2 text-base leading-snug text-telemetry">{profile.title}</p>
+            )}
             <dl>
-              <Field label="Location">{profile.location}</Field>
-              <Field label="Education">
-                {profile.educationSummary}
-              </Field>
+              {profile.location && <Field label="Location">{profile.location}</Field>}
+              {profile.educationSummary && <Field label="Education">{profile.educationSummary}</Field>}
             </dl>
           </div>
         </div>
       </GlassPanel>
-    </motion.div>
+    </m.div>
   )
 }

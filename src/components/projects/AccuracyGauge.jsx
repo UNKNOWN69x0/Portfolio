@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 const SIZE = 240
 const CENTER = SIZE / 2
@@ -19,6 +19,7 @@ const ARC = `M${sx} ${sy}A${RADIUS} ${RADIUS} 0 1 1 ${ex} ${ey}`
 const TICKS = Array.from({ length: 11 }, (_, i) => START + (SWEEP * i) / 10)
 
 // 270 degree dial on a 0 to 100 scale. `value` and `label` come straight from content.js.
+// The value arc swings into place: transform and opacity only.
 export default function AccuracyGauge({ value, label }) {
   const reduce = useReducedMotion()
   const shared = {
@@ -28,7 +29,11 @@ export default function AccuracyGauge({ value, label }) {
     stroke: '#FF3B30',
     strokeWidth: 10,
     strokeLinecap: 'round',
-    style: { filter: 'drop-shadow(0 0 6px rgba(255,59,48,0.7))' },
+    style: {
+      filter: 'drop-shadow(0 0 6px rgba(255,59,48,0.7))',
+      transformBox: 'view-box',
+      transformOrigin: `${CENTER}px ${CENTER}px`,
+    },
   }
 
   return (
@@ -50,11 +55,11 @@ export default function AccuracyGauge({ value, label }) {
       {reduce ? (
         <path {...shared} />
       ) : (
-        <motion.path
+        <m.path
           {...shared}
-          initial={{ strokeDashoffset: value }}
-          animate={{ strokeDashoffset: 0 }}
-          transition={{ duration: 1.1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, rotate: -24 }}
+          animate={{ opacity: 1, rotate: 0 }}
+          transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
         />
       )}
 

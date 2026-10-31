@@ -30,7 +30,7 @@ function mailtoHref(v) {
 }
 
 const inputCls =
-  'mt-1.5 block min-h-[48px] w-full rounded-sm border bg-carbon/70 px-3.5 py-2.5 text-base text-hard placeholder:text-muted/70 outline-none transition-colors focus-visible:border-telemetry focus-visible:ring-2 focus-visible:ring-telemetry/60'
+  'mt-1.5 block min-h-[48px] w-full rounded-sm border bg-carbon/70 px-3.5 py-2.5 text-base text-hard transition-colors focus-visible:border-telemetry focus-visible:outline-offset-0'
 
 function Bubble({ children, mine = false, tag }) {
   return (
@@ -56,7 +56,7 @@ function Field({ id, label, error, children }) {
       </label>
       {children}
       {error && (
-        <p id={`${id}-error`} className="mt-1.5 text-base text-kerb">
+        <p id={`${id}-error`} className="mt-1.5 text-base text-kerb-light">
           {error}
         </p>
       )}
@@ -78,7 +78,7 @@ function LinkRow({ href, icon, label, external = false, download = false, ariaLa
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       {...(download ? { download: true } : {})}
       aria-label={ariaLabel}
-      className="group flex min-h-[48px] items-center gap-3 border border-white/15 bg-asphalt/70 px-4 py-2 text-base text-hard outline-none transition duration-200 hover:border-kerb hover:text-kerb focus-visible:border-kerb focus-visible:ring-2 focus-visible:ring-telemetry/60"
+      className="flex min-h-[48px] items-center gap-3 border border-white/15 bg-asphalt/70 px-4 py-2 text-base text-hard transition-colors duration-200 hover:border-kerb hover:text-kerb-light"
     >
       <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d={ICON[icon]} />
@@ -164,8 +164,8 @@ export default function Contact() {
   const described = (k) => (errors[k] ? `${k}-error` : undefined)
 
   return (
-    <section id="contact" className="container-page section-y">
-      <SectionHeading {...meta} titleClassName="text-fluid-title" />
+    <section id="contact" aria-labelledby="contact-title" className="container-page section-y">
+      <SectionHeading {...meta} />
 
       <div className="gap-fluid grid lg:grid-cols-12">
         <Reveal delay={0.1} className="lg:col-span-7">
@@ -243,21 +243,13 @@ export default function Contact() {
                 </label>
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-                <button
-                  type="submit"
-                  disabled={blocked}
-                  className="group relative inline-block -skew-x-12 outline-none disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  <span className="relative flex min-h-[48px] min-w-[44px] items-center border border-kerb bg-kerb px-7 text-carbon transition-colors group-hover:bg-[#ff5a50] group-focus-visible:ring-2 group-focus-visible:ring-telemetry group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-carbon">
-                    <span className="inline-block skew-x-12 font-display text-sm font-semibold uppercase tracking-widest">
-                      {sending ? 'Transmitting…' : cooldown > 0 ? `Wait ${cooldown}s` : 'Send message'}
-                    </span>
-                  </span>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-3 pl-2">
+                <button type="submit" disabled={blocked} className="plate plate-primary">
+                  <span>{sending ? 'Transmitting…' : cooldown > 0 ? `Wait ${cooldown}s` : 'Send message'}</span>
                 </button>
               </div>
 
-              <div aria-live="polite" role="status" className="min-h-[1.5rem] text-base">
+              <div role="status" className="min-h-[1.5rem] text-base">
                 {status === 'success' && <p className="text-telemetry">Message received. Copy that.</p>}
                 {status === 'mailto' && (
                   <p className="text-hard/85">
@@ -270,7 +262,7 @@ export default function Contact() {
                   </p>
                 )}
                 {status === 'error' && (
-                  <p className="text-kerb">
+                  <p className="text-kerb-light">
                     That did not go through.{' '}
                     <a className="underline underline-offset-4" href={lastMailto}>
                       Send it by email instead
@@ -278,21 +270,18 @@ export default function Contact() {
                     .
                   </p>
                 )}
-                {cooldown > 0 && status === 'success' && (
-                  <p className="mt-1 text-muted">You can send another message in {cooldown}s.</p>
-                )}
               </div>
             </form>
           </GlassPanel>
         </Reveal>
 
-        <Reveal delay={0.2} className="lg:col-span-5">
-          <GlassPanel accent cut={22} className="h-full" innerClassName="pad-fluid h-full">
+        <Reveal delay={0.2} className="lg:sticky lg:top-24 lg:col-span-5 lg:self-start">
+          <GlassPanel accent cut={22} innerClassName="pad-fluid">
             <p className="hud-label">Direct line</p>
             <p className="mt-3 font-display text-[clamp(1.25rem,1.05rem+1vw,1.75rem)] font-bold leading-tight tracking-tight">
               Prefer to skip the form?
             </p>
-            <p className="mt-2 break-all font-mono text-base text-telemetry sm:break-normal">{profile.email}</p>
+            {profile.email && <p className="mt-2 break-all font-mono text-base text-telemetry">{profile.email}</p>}
 
             <div className="mt-5 flex flex-col gap-3">
               {profile.email && <LinkRow href={`mailto:${profile.email}`} icon="mail" label="Email" />}

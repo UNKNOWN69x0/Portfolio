@@ -15,14 +15,9 @@ export default function useModalFocus(open, panelRef, returnRef, onClose) {
     if (!open) return undefined
     const root = document.getElementById('root')
     const html = document.documentElement
-    const { body } = document
     const prevOverflow = html.style.overflow
-    const prevPadding = body.style.paddingRight
 
-    // keep the page from shifting when a classic scrollbar disappears
-    const gutter = window.innerWidth - html.clientWidth
     html.style.overflow = 'hidden'
-    if (gutter > 0) body.style.paddingRight = `${gutter}px`
     root.inert = true
 
     panelRef.current?.querySelector('[data-autofocus]')?.focus({ preventScroll: true })
@@ -55,7 +50,6 @@ export default function useModalFocus(open, panelRef, returnRef, onClose) {
       document.removeEventListener('keydown', onKey)
       root.inert = false
       html.style.overflow = prevOverflow
-      body.style.paddingRight = prevPadding
       returnRef.current?.focus({ preventScroll: true })
     }
   }, [open, panelRef, returnRef])

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 // Original abstract circuit outline (not modelled on any real track).
 const TRACK =
@@ -7,11 +7,15 @@ const TRACK =
 
 const LAP_SECONDS = 14
 const TRAIL = 4 // dots: one head + trailing dots
+const DRAW_MS = 2000 // matches .track-seg: 60 slices, 30ms apart, 200ms fade
+const SEGMENTS = Array.from({ length: 60 }, (_, i) => i)
 
-// The outline draws itself once `run` turns true, then a glowing dot loops around it.
+// The racing line appears slice by slice once `run` turns true (opacity only, no stroke
+// animation), then a glowing dot loops around it, paused while the hero is off screen.
 // Under reduced motion: the finished outline with a static dot at the start line.
 export default function TrackBackground({ run, onLap }) {
   const reduce = useReducedMotion()
+  const svgRef = useRef(null)
   const motionRefs = useRef([])
   const [started, setStarted] = useState(false)
   const [moving, setMoving] = useState(false)
@@ -19,7 +23,7 @@ export default function TrackBackground({ run, onLap }) {
   // start the dot after the outline has finished drawing
   useEffect(() => {
     if (reduce || !run) return undefined
-    const t = setTimeout(() => setStarted(true), 1800)
+    const t = setTimeout(() => setStarted(true), DRAW_MS)
     return () => clearTimeout(t)
   }, [run, reduce])
 
@@ -38,38 +42,64 @@ export default function TrackBackground({ run, onLap }) {
     return () => head.removeEventListener('repeatEvent', handler)
   }, [started, onLap])
 
+  useEffect(() => {
+    if (!moving) return undefined
+    const svg = svgRef.current
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) svg.unpauseAnimations()
+      else svg.pauseAnimations()
+    })
+    observer.observe(svg)
+    return () => observer.disconnect()
+  }, [moving])
+
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] opacity-50 md:opacity-70 lg:inset-y-0 lg:left-auto lg:right-0 lg:h-full lg:w-[68%]"
+      className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] opacity-50 lg:inset-y-0 lg:left-auto lg:right-0 lg:h-full lg:w-[68%]"
     >
       <svg
+        ref={svgRef}
         viewBox="0 0 1000 600"
         preserveAspectRatio="xMidYMid meet"
         className="h-full w-full"
         fill="none"
       >
         {/* track surface */}
-        <motion.path
+        <m.path
           d={TRACK}
           stroke="rgba(255,255,255,0.06)"
           strokeWidth="22"
           strokeLinejoin="round"
-          initial={reduce ? false : { pathLength: 0 }}
-          animate={{ pathLength: run || reduce ? 1 : 0 }}
-          transition={{ duration: 1.8, ease: 'easeInOut' }}
+          initial={reduce ? false : { opacity: 0 }}
+          animate={{ opacity: run || reduce ? 1 : 0 }}
+          transition={{ duration: DRAW_MS / 1000, ease: 'easeInOut' }}
         />
         {/* glowing racing line */}
-        <motion.path
-          d={TRACK}
+        <g
           stroke="#ff3b30"
           strokeWidth="2.5"
           strokeLinejoin="round"
           className="md:[filter:drop-shadow(0_0_6px_rgba(255,59,48,0.85))]"
-          initial={reduce ? false : { pathLength: 0 }}
-          animate={{ pathLength: run || reduce ? 1 : 0 }}
-          transition={{ duration: 1.8, ease: 'easeInOut' }}
-        />
+        >
+          {started || reduce ? (
+            <path d={TRACK} />
+          ) : (
+            <g className={run ? 'track-run' : undefined}>
+              {SEGMENTS.map((i) => (
+                <path
+                  key={i}
+                  className="track-seg"
+                  d={TRACK}
+                  pathLength={SEGMENTS.length}
+                  strokeDasharray={`1.05 ${SEGMENTS.length}`}
+                  strokeDashoffset={-i}
+                  style={{ '--i': i }}
+                />
+              ))}
+            </g>
+          )}
+        </g>
         {/* start/finish tick */}
         <line x1="108" y1="432" x2="132" y2="408" stroke="#f2f4f7" strokeWidth="3" opacity="0.7" />
 

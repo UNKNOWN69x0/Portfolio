@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
-import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
+import { m, useMotionValue, useReducedMotion, useSpring } from 'framer-motion'
 
 const INTERACTIVE =
   'a, button, [role="button"], summary, label[for], select, input[type="submit"], input[type="button"]'
-// Desktop with a real mouse only; touch devices and anything below md keep the native cursor.
-const QUERY = '(min-width: 768px) and (hover: hover) and (pointer: fine)'
 
+// Mounted for desktop with a real mouse only (see App); reduced motion keeps the native cursor.
 export default function CustomCursor() {
   const reduce = useReducedMotion()
-  const [enabled, setEnabled] = useState(false)
   const [visible, setVisible] = useState(false)
   const [hovering, setHovering] = useState(false)
   const [pressed, setPressed] = useState(false)
@@ -19,19 +17,7 @@ export default function CustomCursor() {
   const ringY = useSpring(y, { stiffness: 380, damping: 32, mass: 0.4 })
 
   useEffect(() => {
-    if (reduce) {
-      setEnabled(false)
-      return undefined
-    }
-    const mq = window.matchMedia(QUERY)
-    const update = () => setEnabled(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [reduce])
-
-  useEffect(() => {
-    if (!enabled) return undefined
+    if (reduce) return undefined
     const root = document.documentElement
     root.classList.add('has-custom-cursor')
 
@@ -61,14 +47,14 @@ export default function CustomCursor() {
       window.removeEventListener('mouseup', onUp)
       document.documentElement.removeEventListener('mouseleave', onLeave)
     }
-  }, [enabled, x, y])
+  }, [reduce, x, y])
 
-  if (!enabled) return null
+  if (reduce) return null
 
   return (
     <div aria-hidden="true" className="pointer-events-none fixed left-0 top-0 z-[200]">
-      <motion.div className="absolute left-0 top-0" style={{ x: ringX, y: ringY }}>
-        <motion.div
+      <m.div className="absolute left-0 top-0" style={{ x: ringX, y: ringY }}>
+        <m.div
           className="-ml-3.5 -mt-3.5 h-7 w-7 rounded-full border-2 border-kerb shadow-glow-sm will-change-transform"
           animate={{
             scale: pressed ? 0.8 : hovering ? 1.9 : 1,
@@ -76,8 +62,8 @@ export default function CustomCursor() {
           }}
           transition={{ duration: 0.18, ease: 'easeOut' }}
         />
-      </motion.div>
-      <motion.div
+      </m.div>
+      <m.div
         className="absolute left-0 top-0 -ml-[2px] -mt-[2px] h-1 w-1 rounded-full bg-kerb"
         style={{ x, y, opacity: visible ? 1 : 0 }}
       />

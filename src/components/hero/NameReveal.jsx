@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 const STAGGER = 0.05
 const BASE_DELAY = 0.15
@@ -8,9 +8,9 @@ function Letter({ char, index, fast }) {
   const duration = fast ? 0.2 : 0.45
 
   return (
-    <span className="hero-failsafe relative inline-block">
+    <span className="relative inline-block">
       {/* speed streak trailing behind the letter as it slams in */}
-      <motion.span
+      <m.span
         aria-hidden="true"
         className="absolute left-full top-[55%] h-[0.08em] w-[1.1em] origin-left bg-gradient-to-r from-kerb to-transparent"
         variants={{
@@ -22,22 +22,21 @@ function Letter({ char, index, fast }) {
           },
         }}
       />
-      <motion.span
-        className="inline-block"
+      <m.span
+        className="hero-failsafe inline-block"
         variants={{
-          hidden: { opacity: 0, x: 140, scaleX: 2.4, skewX: -30, filter: 'blur(14px)' },
+          hidden: { opacity: 0, x: 140, scaleX: 2.4, skewX: -30 },
           show: {
             opacity: 1,
             x: 0,
             scaleX: 1,
             skewX: 0,
-            filter: 'blur(0px)',
             transition: { delay, duration, ease: [0.16, 1, 0.3, 1] },
           },
         }}
       >
         {char}
-      </motion.span>
+      </m.span>
     </span>
   )
 }
@@ -50,7 +49,8 @@ export default function NameReveal({ name, revealed, fast }) {
   let index = 0
 
   return (
-    <motion.h1
+    <m.h1
+      id="hero-title"
       aria-label={name}
       className="font-display text-[clamp(3.25rem,14vw,7.5rem)] font-bold italic uppercase leading-[0.9] tracking-tight"
       initial={reduce ? false : 'hidden'}
@@ -69,6 +69,6 @@ export default function NameReveal({ name, revealed, fast }) {
           ))}
         </span>
       ))}
-    </motion.h1>
+    </m.h1>
   )
 }

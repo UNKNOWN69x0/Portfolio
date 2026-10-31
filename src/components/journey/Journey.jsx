@@ -1,5 +1,5 @@
 import { useId, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import { AnimatePresence, m, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import { education, experience, projects, sections, timeline } from '../../data/content.js'
 import GlassPanel from '../ui/GlassPanel.jsx'
 import Reveal from '../ui/Reveal.jsx'
@@ -82,13 +82,13 @@ function Round({ t, side }) {
             aria-expanded={open}
             aria-controls={id}
             onClick={() => setOpen((v) => !v)}
-            className="flex min-h-[44px] w-full items-start gap-3 px-[clamp(1rem,0.7rem+1.5vw,1.75rem)] py-4 text-left outline-none focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-telemetry"
+            className="flex min-h-[44px] w-full items-start gap-3 px-[clamp(1rem,0.7rem+1.5vw,1.75rem)] py-4 text-left focus-visible:-outline-offset-4"
           >
             <span className="min-w-0 flex-1">
               <span className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-sm uppercase tracking-widest">
                 <span style={{ color }}>Round {t.round}</span>
                 <span className="text-muted">{date}</span>
-                <span className="text-muted/70">{TYPE_LABEL[t.type]}</span>
+                <span className="text-muted">{TYPE_LABEL[t.type]}</span>
               </span>
               <span className="mt-1 block font-display text-[clamp(1.25rem,1.05rem+0.9vw,1.6rem)] font-bold uppercase leading-tight tracking-tight text-hard">
                 {t.label}
@@ -111,15 +111,14 @@ function Round({ t, side }) {
 
           <AnimatePresence initial={false}>
             {open && (
-              <motion.div
+              <m.div
                 id={id}
                 role="region"
                 aria-label={`${t.label} details`}
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                className="overflow-hidden"
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               >
                 <dl className="space-y-3 border-t border-white/10 px-[clamp(1rem,0.7rem+1.5vw,1.75rem)] pb-5 pt-4">
                   {details.filter(Boolean).map((d) => (
@@ -129,7 +128,7 @@ function Round({ t, side }) {
                     </div>
                   ))}
                 </dl>
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </GlassPanel>
@@ -145,9 +144,9 @@ export default function Journey() {
   const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 28, mass: 0.4 })
 
   return (
-    <section id="journey" className="container-page section-y relative overflow-x-clip">
+    <section id="journey" aria-labelledby="journey-title" className="container-page section-y relative overflow-x-clip">
       <TrackMapBg />
-      <SectionHeading {...meta} titleClassName="text-fluid-title" />
+      <SectionHeading {...meta} />
 
       <div ref={listRef} className="relative">
         {/* base line + lap-progress fill */}
@@ -155,9 +154,9 @@ export default function Journey() {
           aria-hidden="true"
           className="absolute bottom-0 left-5 top-0 w-0.5 -translate-x-1/2 bg-white/10 md:left-1/2"
         />
-        <motion.div
+        <m.div
           aria-hidden="true"
-          className="absolute bottom-0 left-5 top-0 w-0.5 origin-top -translate-x-1/2 bg-kerb shadow-glow md:left-1/2"
+          className="absolute bottom-0 left-5 top-0 w-0.5 origin-top -translate-x-1/2 bg-kerb shadow-glow-sm md:left-1/2"
           style={reduce ? undefined : { scaleY: fill }}
         />
 

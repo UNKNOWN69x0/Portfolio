@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 const BARS = 28
 // Fixed pseudo-random heights so the shape is stable between renders.
@@ -13,7 +13,7 @@ export default function Waveform({ active }) {
       {SHAPE.map((h, i) => {
         const animate = active && !reduce
         return (
-          <motion.span
+          <m.span
             key={i}
             className="block w-[3px] flex-1 origin-center rounded-full bg-telemetry"
             style={{ height: '100%', boxShadow: '0 0 6px rgba(34,211,238,0.6)' }}

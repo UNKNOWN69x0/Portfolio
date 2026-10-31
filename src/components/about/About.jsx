@@ -10,8 +10,8 @@ export default function About() {
   const [lead, ...rest] = about.split('. ')
 
   return (
-    <section id="about" className="container-page section-y">
-      <SectionHeading {...meta} titleClassName="text-fluid-title" />
+    <section id="about" aria-labelledby="about-title" className="container-page section-y">
+      <SectionHeading {...meta} />
 
       <div className="gap-fluid grid lg:grid-cols-12">
         <Reveal delay={0.1} className="lg:col-span-7">

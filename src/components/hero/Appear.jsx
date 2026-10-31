@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 
 // Hero reveal wrapper. Hidden until `revealed`, then slides/fades in after `delay`.
 // Under reduced motion it renders in its final state with no animation.
@@ -14,7 +14,7 @@ export default function Appear({
   children,
 }) {
   const reduce = useReducedMotion()
-  const MotionTag = motion[as]
+  const MotionTag = m[as]
 
   return (
     <MotionTag

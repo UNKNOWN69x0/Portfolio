@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, m, useReducedMotion } from 'framer-motion'
 import { profile, sections } from '../../data/content.js'
 import StartLights from './StartLights.jsx'
 import TrackBackground from './TrackBackground.jsx'
@@ -19,11 +19,13 @@ const GO_TO_DONE = 700
 
 const hero = sections.find((s) => s.id === 'hero')
 const city = profile.location?.split(',')[0].trim()
+// A link straight to a section should not sit behind the intro.
+const deepLink = !['', '#hero'].includes(window.location.hash)
 
 export default function Hero() {
   const reduce = useReducedMotion()
   // 'intro' (lights) -> 'go' (lights out: flash + shake) -> 'done'. Plays once per page load.
-  const [phase, setPhase] = useState(reduce ? 'done' : 'intro')
+  const [phase, setPhase] = useState(reduce || deepLink ? 'done' : 'intro')
   const [lit, setLit] = useState(0)
   const [skipped, setSkipped] = useState(false)
   const [lap, setLap] = useState(1)
@@ -55,16 +57,19 @@ export default function Hero() {
     return () => clearTimeout(t)
   }, [phase])
 
-  // no scrolling while the intro covers the page; Escape skips it
+  // no scrolling or tabbing behind the intro while it covers the page; Escape skips it
   useEffect(() => {
     if (phase !== 'intro') return undefined
     const html = document.documentElement
+    const root = document.getElementById('root')
     const prev = html.style.overflow
     html.style.overflow = 'hidden'
+    root.inert = true
     const onKey = (e) => e.key === 'Escape' && skip()
     window.addEventListener('keydown', onKey)
     return () => {
       html.style.overflow = prev
+      root.inert = false
       window.removeEventListener('keydown', onKey)
     }
   }, [phase, skip])
@@ -76,6 +81,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      aria-labelledby="hero-title"
       className="relative isolate flex min-h-[calc(100svh-5.5rem)] items-center overflow-hidden"
     >
       {/* portal: must stack above the sticky header and HUD, outside <main>'s stacking context */}
@@ -91,7 +97,7 @@ export default function Hero() {
       <TrackBackground run={revealed} onLap={onLap} />
       <SpeedLines />
 
-      <motion.div
+      <m.div
         className="container-page relative z-10 py-14 sm:py-20 lg:py-24"
         animate={
           shake
@@ -102,10 +108,8 @@ export default function Hero() {
       >
         {hero && (
           <Appear revealed={revealed} fast={skipped} delay={0.05} x={-16} y={0}>
-            <p className="mb-4 flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-telemetry">
-              <span className="rounded-sm bg-asphalt-light px-2 py-1 text-kerb text-glow">
-                {hero.sector}
-              </span>
+            <p className="eyebrow mb-3">
+              <span className="sector-chip">{hero.sector}</span>
               {hero.eyebrow}
             </p>
           </Appear>
@@ -154,7 +158,7 @@ export default function Hero() {
             <PitBoard name={profile.name} city={city} lap={lap} />
           </Appear>
         </div>
-      </motion.div>
+      </m.div>
     </section>
   )
 }

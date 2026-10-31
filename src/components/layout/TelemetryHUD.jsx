@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import {
-  motion,
+  m,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
@@ -18,7 +18,7 @@ const PX_PER_KMH = 9 // scroll speed (px/s) / 9 ~ "km/h"
 const pad = (n) => String(n).padStart(3, '0')
 
 // Fixed side rail, desktop (xl) only: scroll-speed readout, lap progress, current sector.
-// Under reduced motion it shows only the sector label, static.
+// Under reduced motion it shows only the sector label, static. Only mounted at xl (see App).
 export default function TelemetryHUD() {
   const reduce = useReducedMotion()
   const activeId = useActiveSection()
@@ -40,37 +40,39 @@ export default function TelemetryHUD() {
   return (
     <aside
       aria-label="Telemetry"
-      className="pointer-events-none fixed bottom-6 right-2 top-24 z-40 hidden w-12 xl:block"
+      className="pointer-events-none fixed bottom-6 right-2 top-24 z-40 w-12"
     >
       <GlassPanel cut={10} className="h-full" innerClassName="flex flex-col items-center py-3">
-        {/* speed */}
-        <div className="text-center font-mono leading-none" aria-hidden="true">
-          <span
-            ref={speedRef}
-            className="block w-9 text-[15px] font-medium tabular-nums text-hard text-glow"
-          >
-            000
-          </span>
-          <span className="mt-1 block text-[8px] tracking-widest text-muted">KM/H</span>
-        </div>
+        {!reduce && (
+          <>
+            {/* speed */}
+            <div className="text-center font-mono leading-none" aria-hidden="true">
+              <span
+                ref={speedRef}
+                className="block w-9 text-[15px] font-medium tabular-nums text-hard"
+              >
+                000
+              </span>
+              <span className="mt-1 block text-[9px] tracking-wider text-muted">KM/H</span>
+            </div>
 
-        {/* lap progress */}
-        <div className="relative my-3 w-[3px] flex-1 overflow-hidden rounded-full bg-white/10">
-          {!reduce && (
-            <motion.div
-              className="absolute inset-0 origin-top bg-kerb shadow-glow-sm"
-              style={{ scaleY: lap }}
-            />
-          )}
-        </div>
+            {/* lap progress */}
+            <div className="relative my-3 w-[3px] flex-1 overflow-hidden rounded-full bg-white/10">
+              <m.div
+                className="absolute inset-0 origin-top bg-kerb"
+                style={{ scaleY: lap }}
+              />
+            </div>
+          </>
+        )}
 
         {/* sector */}
-        <div className="text-center font-mono leading-none">
-          <span className="block text-[8px] tracking-widest text-muted">SECTOR</span>
-          <span className="mt-1 block text-lg font-semibold text-kerb text-glow">
+        <div className={`text-center font-mono leading-none ${reduce ? 'my-auto' : ''}`}>
+          <span className="block text-[9px] tracking-wider text-muted">SECTOR</span>
+          <span className="mt-1 block text-lg font-medium text-kerb-light">
             {active.sector}
           </span>
-          <span className="mt-2 block text-[9px] uppercase tracking-[0.2em] text-telemetry [writing-mode:vertical-rl]">
+          <span className="mt-2 inline-block text-[10px] uppercase tracking-[0.2em] text-telemetry [writing-mode:vertical-rl]">
             {active.eyebrow}
           </span>
         </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, m } from 'framer-motion'
 import { sections, skillCategories, skillCompounds } from '../../data/content.js'
 import GlassPanel from '../ui/GlassPanel.jsx'
 import Reveal from '../ui/Reveal.jsx'
@@ -22,9 +22,8 @@ skillCompounds.forEach((c) => c.items.forEach((s) => (compoundOf[s] = c)))
 function Chip({ children, color = '#22D3EE', dot = false }) {
   return (
     <li
-      tabIndex={0}
       style={{ '--c': color }}
-      className="inline-flex min-h-[44px] items-center gap-2 rounded-sm border border-white/15 bg-asphalt/70 px-3.5 py-2 text-base text-hard outline-none transition duration-200 hover:border-[color:var(--c)] hover:[box-shadow:0_0_14px_var(--c)] focus-visible:border-[color:var(--c)] focus-visible:[box-shadow:0_0_14px_var(--c)]"
+      className="inline-flex min-h-[44px] items-center gap-2 rounded-sm border border-white/15 bg-asphalt/70 px-3.5 py-2 text-base text-hard transition-colors duration-200 hover:border-[color:var(--c)]"
     >
       {dot && (
         <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ background: color }} />
@@ -38,7 +37,7 @@ function CompoundCard({ compound }) {
   const look = LOOK[compound.id]
   return (
     <GlassPanel accent cut={20} className="h-full" innerClassName="pad-fluid flex h-full flex-col">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-x-3">
         <h3
           className="font-display text-[clamp(1.5rem,1.2rem+1vw,2rem)] font-bold uppercase tracking-tight"
           style={{ color: look.color }}
@@ -48,11 +47,13 @@ function CompoundCard({ compound }) {
         <span className="hud-label">{compound.note}</span>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 items-center gap-3 md:grid-cols-1 xl:grid-cols-2">
+      <div className="mt-4 grid grid-cols-2 items-center gap-3">
         <TyreGraphic color={look.color} blocks={look.blocks} grooves={look.grooves} className="mx-auto w-full max-w-[12rem]" />
-        <div className="text-center">
+        <div className="min-w-0 text-center">
           <SkillGauge fraction={look.fraction} color={look.color} className="mx-auto w-full max-w-[12rem]" />
-          <p className="-mt-3 font-mono text-base uppercase tracking-wider text-hard">{look.readout}</p>
+          <p className="mt-1 break-words font-mono text-[clamp(0.6875rem,0.55rem+0.5vw,0.875rem)] uppercase tracking-wider text-hard">
+            {look.readout}
+          </p>
         </div>
       </div>
 
@@ -98,8 +99,8 @@ export default function Skills() {
   const [mode, setMode] = useState('compound')
 
   return (
-    <section id="skills" className="container-page section-y">
-      <SectionHeading {...meta} titleClassName="text-fluid-title" />
+    <section id="skills" aria-labelledby="skills-title" className="container-page section-y">
+      <SectionHeading {...meta} />
 
       <Reveal delay={0.1}>
         <div
@@ -107,32 +108,25 @@ export default function Skills() {
           role="group"
           aria-label="Group skills"
         >
-          {MODES.map((m) => {
-            const on = mode === m.id
-            return (
-              <button
-                key={m.id}
-                type="button"
-                aria-pressed={on}
-                onClick={() => setMode(m.id)}
-                className={`min-h-[44px] -skew-x-12 border px-5 font-mono text-sm uppercase tracking-wider transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-telemetry ${
-                  on
-                    ? 'border-kerb bg-kerb text-carbon'
-                    : 'border-white/25 bg-asphalt/70 text-hard hover:border-kerb hover:text-kerb'
-                }`}
-              >
-                <span className="inline-block skew-x-12">{m.label}</span>
-              </button>
-            )
-          })}
+          {MODES.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              aria-pressed={mode === option.id}
+              onClick={() => setMode(option.id)}
+              className="plate plate-sm"
+            >
+              <span>{option.label}</span>
+            </button>
+          ))}
         </div>
       </Reveal>
 
       <AnimatePresence mode="wait" initial={false}>
         {mode === 'compound' ? (
-          <motion.div
+          <m.div
             key="compound"
-            className="gap-fluid grid md:grid-cols-3"
+            className="gap-fluid grid lg:grid-cols-3"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
@@ -141,9 +135,9 @@ export default function Skills() {
             {skillCompounds.map((c) => (
               <CompoundCard key={c.id} compound={c} />
             ))}
-          </motion.div>
+          </m.div>
         ) : (
-          <motion.div
+          <m.div
             key="category"
             className="gap-fluid grid sm:grid-cols-2"
             initial={{ opacity: 0, y: 12 }}
@@ -154,7 +148,7 @@ export default function Skills() {
             {skillCategories.map((c, i) => (
               <CategoryCard key={c.label} category={c} index={i} />
             ))}
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </section>

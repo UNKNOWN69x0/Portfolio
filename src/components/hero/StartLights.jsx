@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { useLayoutEffect, useRef } from 'react'
+import { m } from 'framer-motion'
 
 const COUNT = 5
 
@@ -10,21 +11,21 @@ function Light({ on }) {
       {/* lamp, off */}
       <div className="absolute inset-[16%] rounded-full bg-[#2a0c0c] shadow-[inset_0_0_10px_rgba(0,0,0,0.9)]" />
       {/* lamp, on */}
-      <motion.div
+      <m.div
         className="absolute inset-[16%] rounded-full bg-[radial-gradient(circle_at_35%_30%,#ff9a90,#ff2a1f_45%,#b30f08_100%)] shadow-[0_0_24px_6px_rgba(255,42,31,0.8)]"
         initial={{ opacity: 0 }}
         animate={{ opacity: on ? 1 : 0 }}
         transition={{ duration: 0.08 }}
       />
       {/* hot centre */}
-      <motion.div
+      <m.div
         className="absolute inset-[38%] rounded-full bg-white/90 blur-[3px]"
         initial={{ opacity: 0 }}
         animate={{ opacity: on ? 0.9 : 0 }}
         transition={{ duration: 0.08 }}
       />
       {/* lens-flare halo */}
-      <motion.div
+      <m.div
         aria-hidden="true"
         className="pointer-events-none absolute -inset-[70%] rounded-full bg-[radial-gradient(circle,rgba(255,42,31,0.42),transparent_62%)]"
         initial={{ opacity: 0, scale: 0.6 }}
@@ -32,7 +33,7 @@ function Light({ on }) {
         transition={{ duration: 0.2, ease: 'easeOut' }}
       />
       {/* anamorphic streak */}
-      <motion.div
+      <m.div
         aria-hidden="true"
         className="pointer-events-none absolute left-[-120%] top-[calc(50%-1px)] h-0.5 w-[340%] bg-gradient-to-r from-transparent via-white/80 to-transparent"
         initial={{ opacity: 0, scaleX: 0 }}
@@ -46,9 +47,20 @@ function Light({ on }) {
 // Full-screen intro overlay: five lights switch on, hold, then go out (flash + fade).
 export default function StartLights({ lit, go, skipped, onSkip }) {
   const caption = go ? 'Go' : lit === COUNT ? 'Ready' : 'Standby'
+  const skipRef = useRef(null)
+
+  // keyboard users land at the top of the page, not on a button that just disappeared
+  useLayoutEffect(() => {
+    const button = skipRef.current
+    return () => {
+      if (document.activeElement === button) {
+        document.getElementById('skip-link')?.focus({ preventScroll: true })
+      }
+    }
+  }, [])
 
   return (
-    <motion.div
+    <m.div
       role="region"
       aria-label="Intro: race start lights"
       className="intro-failsafe fixed inset-0 z-[90] flex flex-col items-center justify-center overflow-hidden bg-carbon"
@@ -80,22 +92,25 @@ export default function StartLights({ lit, go, skipped, onSkip }) {
       </p>
 
       <button
+        ref={skipRef}
         type="button"
         onClick={onSkip}
-        className="absolute bottom-6 right-4 flex min-h-[44px] min-w-[44px] items-center gap-2 border border-white/20 bg-asphalt/80 px-5 font-mono text-xs uppercase tracking-widest text-hard transition-colors hover:border-kerb hover:text-kerb sm:bottom-8 sm:right-8"
+        className="plate plate-sm absolute bottom-6 right-4 sm:bottom-8 sm:right-8"
       >
-        Skip intro
-        <span aria-hidden="true">→</span>
+        <span className="!gap-2">
+          Skip intro
+          <span aria-hidden="true">→</span>
+        </span>
       </button>
 
       {/* lights-out flash (not shown when skipping) */}
-      <motion.div
+      <m.div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,#ffffff,rgba(255,59,48,0.75)_55%,transparent_85%)]"
         initial={{ opacity: 0 }}
         animate={go && !skipped ? { opacity: [0, 0.95, 0] } : { opacity: 0 }}
         transition={{ duration: 0.45, times: [0, 0.15, 1] }}
       />
-    </motion.div>
+    </m.div>
   )
 }

@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 import useMediaQuery from '../../hooks/useMediaQuery.js'
 import AccuracyGauge from './AccuracyGauge.jsx'
 import BuildPipeline from './BuildPipeline.jsx'
@@ -35,8 +35,7 @@ const TelemetryDrawer = forwardRef(function TelemetryDrawer(
 
   return (
     <div className="fixed inset-0 z-[150]" style={{ '--accent-rgb': accent }}>
-      <motion.div
-        data-testid="telemetry-backdrop"
+      <m.div
         className="absolute inset-0 bg-carbon/75 md:backdrop-blur-sm"
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -45,7 +44,7 @@ const TelemetryDrawer = forwardRef(function TelemetryDrawer(
         onClick={onClose}
       />
 
-      <motion.div
+      <m.div
         ref={ref}
         role="dialog"
         aria-modal="true"
@@ -58,10 +57,10 @@ const TelemetryDrawer = forwardRef(function TelemetryDrawer(
         transition={{ duration: 0.38, ease: EASE }}
       >
         <div className="glass-body drawer-body glass-accent chamfer flex max-h-[88dvh] flex-col md:max-h-none">
-          <header className="pad-x-fluid flex shrink-0 items-start justify-between gap-4 pb-4 pt-5 sm:pt-6">
+          <div className="pad-x-fluid flex shrink-0 items-start justify-between gap-4 pb-4 pt-5 sm:pt-6">
             <div className="min-w-0">
               <p className="hud-label mb-2">
-                <span className="font-semibold text-hard">{position}</span>
+                <span className="font-medium text-hard">{position}</span>
                 <span aria-hidden="true"> / </span>
                 {project.year}
                 <span aria-hidden="true"> / </span>
@@ -93,7 +92,7 @@ const TelemetryDrawer = forwardRef(function TelemetryDrawer(
                 <path d="M6 6l12 12M18 6L6 18" />
               </svg>
             </button>
-          </header>
+          </div>
 
           <div
             tabIndex={0}
@@ -140,26 +139,28 @@ const TelemetryDrawer = forwardRef(function TelemetryDrawer(
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="pit-link chamfer"
+                className="plate plate-primary ml-2"
               >
-                View project
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M7 17L17 7M9 7h8v8" />
-                </svg>
+                <span>
+                  View project
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M7 17L17 7M9 7h8v8" />
+                  </svg>
+                </span>
               </a>
             )}
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   )
 })
